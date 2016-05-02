@@ -1,7 +1,7 @@
 import clock
 from math import exp
 from tools import Tools
-
+from scipy.stats import norm as norm_module
 
 class System:
     def __init__(self, data):
@@ -14,6 +14,7 @@ class System:
 class RGL(System, clock.Observer):
     def __init__(self, data):
         System.__init__(self, data)
+        self.random_item = 1 + norm_module.rvs(0, data['rod_value_accuracy'], 1)[0]
 
     def move_temp_rod(self, rod, target):
         if not self.data['is_temp_active']:
@@ -62,7 +63,7 @@ class RGL(System, clock.Observer):
             else:
                 self.data['is_power_active'] = False
 
-        self.data['delta_rho'] = rho
+        self.data['delta_rho'] = rho * self.random_item
 
 
 class REA(System, clock.Observer):
@@ -122,6 +123,7 @@ class Reac(System, clock.Observer):
     def __init__(self, data):
         System.__init__(self, data)
         self.systems = []
+        self.previous_random = norm_module.rvs(0, data['reactivity_accuracy'], 1)[0]
 
     def add_system(self, s):
         self.systems.append(s)
@@ -164,6 +166,11 @@ class Reac(System, clock.Observer):
         self.data['reactivity'] += system_dict['rgl'].get_data()['delta_rho']
         self.data['reactivity'] += system_dict['rea'].get_data()['delta_rho']
 
+        # 将反应性加上相邻两个随机数的差，而不是直接加上一个随机数，这样做的目的是消除长时间随机数累加和的漂移。
+        current = norm_module.rvs(0, self.data['reactivity_accuracy'], 1)[0]
+        self.data['reactivity'] += current - self.previous_random
+        self.previous_random = current
+
 
 class KIC(System, clock.Observer):
     def __init__(self, data):
@@ -180,4 +187,3 @@ class KIC(System, clock.Observer):
         self.data['irc2'] = self.data['core_power'] / self.data['irc2a2fp']
         self.data['src1'] = self.data['core_power'] / self.data['src1cps2fp']
         self.data['src2'] = self.data['core_power'] / self.data['src2cps2fp']
-

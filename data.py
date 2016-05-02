@@ -1,5 +1,5 @@
 import json
-
+from scipy.stats import norm as norm_module
 
 class Data:
     def __init__(self):
@@ -82,7 +82,8 @@ class ReacData(Data):
             reactivity=0,
             double_time=9999,
             beta=beta,
-            neutron_life=26.98E-6
+            neutron_life=26.98E-6,
+            reactivity_accuracy=1
         )
         self.read_params()
 
@@ -591,6 +592,7 @@ class RglData(Data):
             sb_value=sb_value,
             sc_value=sc_value,
             sd_value=sd_value,
-            g_value=g_value
+            g_value=g_value,
+            rod_value_accuracy=0.05
         )
         self.read_params()
