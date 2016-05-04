@@ -40,12 +40,14 @@ class RGL(System, clock.Observer):
             rod = self.data['current_temp_rod'].lower()
             rod_pos = rod + 'pos'
             rod_value = rod + '_value'
-            rho = 0
+            value_table = self.data[rod_value]
             if self.data[rod_pos] < self.data['temp_target']:
-                rho = Tools.lookup(self.data[rod_value], self.data[rod_pos])
+                rho = (Tools.lookup(value_table, self.data[rod_pos]) +
+                       Tools.lookup(value_table, self.data[rod_pos] + 1)) / 2
                 self.data[rod_pos] += 1
             elif self.data[rod_pos] > self.data['temp_target']:
-                rho = -Tools.lookup(self.data[rod_value], self.data[rod_pos])
+                rho = -(Tools.lookup(value_table, self.data[rod_pos]) +
+                        Tools.lookup(value_table, self.data[rod_pos] - 1)) / 2
                 self.data[rod_pos] -= 1
             else:
                 self.data['is_temp_active'] = False
@@ -54,11 +56,14 @@ class RGL(System, clock.Observer):
             rod = self.data['current_power_rod'].lower()
             rod_pos = rod + 'pos'
             rod_value = rod + '_value'
+            value_table = self.data[rod_value]
             if self.data[rod_pos] < self.data['power_target']:
-                rho = Tools.lookup(self.data[rod_value], self.data[rod_pos])
+                rho = (Tools.lookup(value_table, self.data[rod_pos]) +
+                       Tools.lookup(value_table, self.data[rod_pos] + 1)) / 2
                 self.data[rod_pos] += 1
             elif self.data[rod_pos] > self.data['power_target']:
-                rho = -Tools.lookup(self.data[rod_value], self.data[rod_pos])
+                rho = -(Tools.lookup(value_table, self.data[rod_pos]) +
+                        Tools.lookup(value_table, self.data[rod_pos] - 1)) / 2
                 self.data[rod_pos] -= 1
             else:
                 self.data['is_power_active'] = False
@@ -69,6 +74,10 @@ class RGL(System, clock.Observer):
 class REA(System, clock.Observer):
     def __init__(self, data):
         System.__init__(self, data)
+        self._residual_boron_rate = 0
+        self._residual_dilute_rate = 0
+        self._residual_boron_on = False
+        self._residual_dilute_on = False
 
     def dilute(self, vol, rate):
         if not self.data['is_dilute_active']:
@@ -78,6 +87,8 @@ class REA(System, clock.Observer):
 
     def stop_dilute(self):
         self.data['is_dilute_active'] = False
+        self._residual_dilute_on = True
+        self._residual_dilute_rate = self.data['dilute_rate']
 
     def boron(self, vol, rate):
         if not self.data['is_boron_active']:
@@ -87,36 +98,52 @@ class REA(System, clock.Observer):
 
     def stop_boron(self):
         self.data['is_boron_active'] = False
+        self._residual_boron_on = True
+        self._residual_boron_rate = self.data['boron_rate']
 
     def update(self):
         loop_bc = self.data['loop_bc']
         rcp_vol = self.data['rcp_vol']
         boron_value = Tools.lookup(self.data['boron_value'], loop_bc)
+        tank_bc = self.data['tank_bc']
+        dilute_vol = self.data['dilute_vol']
+        dilute_rate = self.data['dilute_rate']
+        boron_vol = self.data['boron_vol']
+        boron_rate = self.data['boron_rate']
         if self.data['is_dilute_active']:
-            dilute_vol = self.data['dilute_vol']
-            dilute_rate = self.data['dilute_rate']
             e = exp(-dilute_rate / 3600 / rcp_vol)
             if dilute_vol < (dilute_rate / 3600):
                 self.data['dilute_vol'] = 0
-                self.data['is_dilute_active'] = False
+                self.stop_dilute()
             else:
-                self.data['loop_bc'] = e * loop_bc
+                loop_bc *= e
                 self.data['dilute_vol'] -= dilute_rate / 3600
-
-        if self.data['is_boron_active']:
-            boron_vol = self.data['boron_vol']
-            boron_rate = self.data['boron_rate']
-            tank_bc = self.data['tank_bc']
+        elif self.data['is_boron_active']:
             e = exp(-boron_rate / 3600 / rcp_vol)
             if boron_vol < (boron_rate / 3600):
                 self.data['boron_vol'] = 0
-                self.data['is_boron_active'] = False
+                self.stop_boron()
             else:
-                self.data['loop_bc'] = e * loop_bc + (1 - e) * tank_bc
+                loop_bc = e * loop_bc + (1 - e) * tank_bc
                 self.data['boron_vol'] -= boron_rate / 3600
+        elif self._residual_boron_on:
+            if self._residual_boron_rate > 0.01:
+                e = exp(-self._residual_boron_rate / 3600 / rcp_vol)
+                loop_bc = e * loop_bc + (1 - e) * tank_bc
+                self._residual_boron_rate *= 2 ** (-1 / self.data['boron_rate_half_time'])
+            else:
+                self._residual_boron_on = False
+        elif self._residual_dilute_on:
+            if self._residual_dilute_rate > 0.01:
+                e = exp(-self._residual_dilute_rate / 3600 / rcp_vol)
+                loop_bc *= e
+                self._residual_dilute_rate *= 2 ** (-1 / self.data['dilute_rate_half_time'])
+            else:
+                self._residual_dilute_on = False
 
-        rho = -(loop_bc - self.data['loop_bc']) * boron_value
+        rho = (loop_bc - self.data['loop_bc']) * boron_value
         self.data['delta_rho'] = rho
+        self.data['loop_bc'] = loop_bc
 
 
 class Reac(System, clock.Observer):
@@ -183,7 +210,13 @@ class KIC(System, clock.Observer):
     def update(self):
         system_dict = {s.get_data()['name']: s for s in self.systems}
         self.data['core_power'] *= (2 ** (1 / system_dict['reac'].double_time()))
-        self.data['irc1'] = self.data['core_power'] / self.data['irc1a2fp']
-        self.data['irc2'] = self.data['core_power'] / self.data['irc2a2fp']
-        self.data['src1'] = self.data['core_power'] / self.data['src1cps2fp']
-        self.data['src2'] = self.data['core_power'] / self.data['src2cps2fp']
+
+        power = self.data['core_power']
+        src1_accuracy = self.data['src1_accuracy']
+        src2_accuracy = self.data['src2_accuracy']
+        irc1_accuracy = self.data['irc1_accuracy']
+        irc2_accuracy = self.data['irc2_accuracy']
+        self.data['irc1'] = power / self.data['irc1a2fp'] * (1 + norm_module.rvs(0, src1_accuracy, 1)[0])
+        self.data['irc2'] = power / self.data['irc2a2fp'] * (1 + norm_module.rvs(0, src2_accuracy, 1)[0])
+        self.data['src1'] = power / self.data['src1cps2fp'] * (1 + norm_module.rvs(0, irc1_accuracy, 1)[0])
+        self.data['src2'] = power / self.data['src2cps2fp'] * (1 + norm_module.rvs(0, irc2_accuracy, 1)[0])

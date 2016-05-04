@@ -1,6 +1,7 @@
 import json
 from scipy.stats import norm as norm_module
 
+
 class Data:
     def __init__(self):
         self._param = {}
@@ -42,7 +43,9 @@ class ReaData(Data):
             delta_rho=0,
             is_dilute_active=False,
             is_boron_active=False,
-            boron_value=boron_value
+            boron_value=boron_value,
+            boron_rate_half_time=1,
+            dilute_rate_half_time=1,
         )
         self.read_params()
 
@@ -61,7 +64,11 @@ class KicData(Data):
             irc1a2fp=3.5E4,
             irc2a2fp=3.5E4,
             src1cps2fp=1.0E-8,
-            src2cps2fp=1.0E-8
+            src2cps2fp=1.0E-8,
+            src1_accuracy=0.01,
+            src2_accuracy=0.01,
+            irc1_accuracy=0.01,
+            irc2_accuracy=0.01
         )
         self.read_params()
 

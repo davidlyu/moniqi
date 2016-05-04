@@ -1,1 +1,1 @@
-{"irc1": 1, "core_power": 0.01, "irc1a2fp": 35000.0, "irc2": 1, "irc2a2fp": 35000.0, "name": "kic", "src2cps2fp": 1e-08, "src2": 1, "src1": 1, "src1cps2fp": 1e-08}
+{"src2cps2fp": 1e-08, "irc2a2fp": 35000.0, "src1_accuracy": 0.005, "irc2_accuracy": 0.005, "irc1a2fp": 35000.0, "core_power": 0.01, "src2_accuracy": 0.005, "irc1_accuracy": 0.005, "src2": 1, "irc2": 1, "name": "kic", "irc1": 1, "src1cps2fp": 1e-08, "src1": 1}

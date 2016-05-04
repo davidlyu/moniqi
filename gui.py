@@ -111,7 +111,7 @@ class Gui(QtGui.QWidget, clock.Observer):
             top_right_grid.addWidget(self._widgets[name], 1, i)
             i += 1
 
-        labels = ['稀释量', '流量', '稀释']
+        labels = ['稀释量', '流量', '']
         r = ['gselect', 'gneed', 'gstart']
         b = ['dilutevol', 'diluterate', 'dilutestart']
         med_right_grid = QtGui.QGridLayout()
