@@ -25,6 +25,9 @@ class Gui(QtGui.QWidget, clock.Observer):
         header = '%5s %8s %7s %7s %8s %8s' % ('DATE', 'TIME', 'SRC1', 'SRC2', 'IRC1', 'IRC2')
         self.kic_buf.append(header)
         self.kic_buf.append('-' * len(header))
+
+        self.save_file_on = False
+        self.save_file_object = None
         # widgets
 
         self._widgets = {
@@ -203,6 +206,9 @@ class Gui(QtGui.QWidget, clock.Observer):
         self.display_reac(system_dict['reac'].get_data())
         self.display_kic(system_dict['kic'].get_data())
 
+        if self.save_file_on:
+            self.save_file(self.save_file_object, system_dict)
+
     def display_rgl(self, dat):
         for i in ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos',
                   'g1pos', 'g2pos', 'n1pos', 'n2pos', 'gpos']:
@@ -241,6 +247,25 @@ class Gui(QtGui.QWidget, clock.Observer):
             self.kic_buf[2:-16] = []
         self._widgets['table'].setText('\n'.join(self.kic_buf))
 
+    def set_save(self, save_file_object):
+        self.save_file_on = True
+        self.save_file_object = save_file_object
+
+    @staticmethod
+    def save_file(file_object, dat):
+        src1 = dat['kic'].get_data()['src1']
+        src2 = dat['kic'].get_data()['src2']
+        irc1 = dat['kic'].get_data()['irc1']
+        irc2 = dat['kic'].get_data()['irc2']
+        reactivity = dat['reac'].get_data()['reactivity']
+        n = datetime.datetime.now()
+        d = n.strftime('%Y-%m-%d,%H:%M:%S')
+        form = '{datetime:s},{src1:.0f},{src2:.0f},{irc1:.3E},{irc2:.3E},{reactivity:.1f}'.format(
+            datetime=d, src1=src1, src2=src2, irc1=irc1, irc2=irc2,
+            reactivity=reactivity
+        )
+        file_object.write(form + '\n')
+
     def set_temp_on_command(self, com):
         self.temp_on_command = com
 
@@ -264,6 +289,38 @@ class Gui(QtGui.QWidget, clock.Observer):
 
     def set_boron_off_command(self, com):
         self.boron_off_command = com
+
+
+class MainWindow(QtGui.QMainWindow):
+    def __init__(self, gui):
+        QtGui.QMainWindow.__init__(self)
+        self.save_file_object = None
+        self.resize(600, 800)
+        self.setWindowTitle('物理试验模拟器')
+        self.gui = gui
+        self.setCentralWidget(self.gui)
+
+        save_action = QtGui.QAction(QtGui.QIcon('icons/save.png'), '记录', self)
+        self.connect(save_action, QtCore.SIGNAL('triggered()'), self, QtCore.SLOT('on_save()'))
+
+        close_action = QtGui.QAction(QtGui.QIcon('icons/close.png'), '退出', self)
+        self.connect(close_action, QtCore.SIGNAL('triggered()'), self, QtCore.SLOT('on_quit()'))
+
+        menu_bar = self.menuBar()
+        file = menu_bar.addMenu('&File')
+        file.addAction(save_action)
+        file.addAction(close_action)
+
+    @QtCore.pyqtSlot()
+    def on_save(self):
+        filename = QtGui.QFileDialog.getSaveFileName(self, 'Save File', './')
+        self.save_file_object = open(filename, 'a')
+        self.gui.set_save(self.save_file_object)
+
+    @QtCore.pyqtSlot()
+    def on_quit(self):
+        self.save_file_object.close()
+        QtGui.qApp.quit()
 
 
 if __name__ == '__main__':
@@ -316,6 +373,7 @@ if __name__ == '__main__':
     ui.set_boron_on_command(boron_on_com)
     ui.set_boron_off_command(boron_off_com)
 
-    ui.show()
+    main_window = MainWindow(ui)
+    main_window.show()
 
     sys.exit(app.exec_())
