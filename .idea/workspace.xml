@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="beba6bb0-5d08-4ecd-b963-f8c6716774ac" name="Default" comment="">
+    <list default="true" id="beba6bb0-5d08-4ecd-b963-f8c6716774ac" name="Default" comment="更新 2016-5-5&#10;1. 增加保存数据到文件功能。&#10;">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/gui.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui.py" afterPath="$PROJECT_DIR$/gui.py" />
     </list>
     <ignored path="moniqi.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,7 +48,7 @@
       <file leaf-file-name="data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-196">
+            <state relative-caret-position="-1387">
               <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
               <folding>
                 <element signature="e#74#567#0" expanded="false" />
@@ -59,27 +59,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gui.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/gui.py">
+      <file leaf-file-name="gui.pyw" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/gui.pyw">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="311" column="36" selection-start-line="311" selection-start-column="36" selection-end-line="311" selection-end-column="36" />
+            <state relative-caret-position="272">
+              <caret line="300" column="40" selection-start-line="300" selection-start-column="40" selection-end-line="300" selection-end-column="40" />
               <folding>
-                <element signature="e#161#11278#0" expanded="false" />
-                <element signature="e#885#1931#0" expanded="false" />
-                <element signature="e#3280#5780#0" expanded="false" />
-                <element signature="e#5813#6203#0" expanded="false" />
-                <element signature="e#6237#6628#0" expanded="false" />
-                <element signature="e#6663#7206#0" expanded="false" />
-                <element signature="e#7240#7776#0" expanded="false" />
-                <element signature="e#7869#8250#0" expanded="false" />
-                <element signature="e#8292#8749#0" expanded="false" />
-                <element signature="e#8791#9370#0" expanded="false" />
-                <element signature="e#9413#9487#0" expanded="false" />
-                <element signature="e#9529#9897#0" expanded="false" />
-                <element signature="e#9949#10022#0" expanded="false" />
-                <element signature="e#10087#10646#0" expanded="false" />
-                <element signature="e#12431#13873#0" expanded="false" />
+                <element signature="e#0#31#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -100,6 +86,7 @@
         <option value="$PROJECT_DIR$/system.py" />
         <option value="$PROJECT_DIR$/data.py" />
         <option value="$PROJECT_DIR$/gui.py" />
+        <option value="$PROJECT_DIR$/gui.pyw" />
       </list>
     </option>
   </component>
@@ -174,7 +161,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="moniqi" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui.pyw" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -350,19 +337,26 @@
       <option name="project" value="LOCAL" />
       <updated>1462384107142</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="更新 2016-5-5&#10;1. 增加保存数据到文件功能。&#10;">
+      <created>1462462092822</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1462462092822</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1060" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24775489" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -390,7 +384,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="反应性仪每次输出的反应性增加了随机噪声。&#10;每次实例化一个 RGL 对象，会产生一个随机因子。加在棒价值上。" />
     <MESSAGE value="更新&#10;1. 源量程计数增加随机效应。&#10;2. 增加硼化稀释后的冲击效应。&#10;3. 解决控制棒价值存在回差的问题。&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新&#10;1. 源量程计数增加随机效应。&#10;2. 增加硼化稀释后的冲击效应。&#10;3. 解决控制棒价值存在回差的问题。&#10;" />
+    <MESSAGE value="更新 2016-5-5&#10;1. 增加保存数据到文件功能。&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新 2016-5-5&#10;1. 增加保存数据到文件功能。&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -399,6 +394,101 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/system.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#121#221#0" expanded="false" />
+            <element signature="e#263#2705#0" expanded="false" />
+            <element signature="e#1051#2705#0" expanded="false" />
+            <element signature="e#2747#5670#0" expanded="false" />
+            <element signature="e#3009#3181#0" expanded="false" />
+            <element signature="e#3399#3567#0" expanded="false" />
+            <element signature="e#3603#3738#0" expanded="false" />
+            <element signature="e#3770#5670#0" expanded="false" />
+            <element signature="e#5713#7463#0" expanded="false" />
+            <element signature="e#7505#8502#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding>
+            <element signature="e#74#567#0" expanded="false" />
+            <element signature="e#595#1288#0" expanded="false" />
+            <element signature="e#1316#1829#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
+          <folding>
+            <element signature="e#121#221#0" expanded="false" />
+            <element signature="e#263#2705#0" expanded="false" />
+            <element signature="e#1051#2705#0" expanded="false" />
+            <element signature="e#2747#5670#0" expanded="false" />
+            <element signature="e#3009#3181#0" expanded="false" />
+            <element signature="e#3399#3567#0" expanded="false" />
+            <element signature="e#3603#3738#0" expanded="false" />
+            <element signature="e#3770#5670#0" expanded="false" />
+            <element signature="e#5713#7463#0" expanded="false" />
+            <element signature="e#7505#8502#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding>
+            <element signature="e#74#567#0" expanded="false" />
+            <element signature="e#595#1288#0" expanded="false" />
+            <element signature="e#1316#1829#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gui.py" />
+    <entry file="file://$PROJECT_DIR$/system.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
+          <folding>
+            <element signature="e#121#221#0" expanded="false" />
+            <element signature="e#263#2705#0" expanded="false" />
+            <element signature="e#1051#2705#0" expanded="false" />
+            <element signature="e#2747#5670#0" expanded="false" />
+            <element signature="e#3009#3181#0" expanded="false" />
+            <element signature="e#3399#3567#0" expanded="false" />
+            <element signature="e#3603#3738#0" expanded="false" />
+            <element signature="e#3770#5670#0" expanded="false" />
+            <element signature="e#5713#7463#0" expanded="false" />
+            <element signature="e#7505#8502#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding>
+            <element signature="e#74#567#0" expanded="false" />
+            <element signature="e#595#1288#0" expanded="false" />
+            <element signature="e#1316#1829#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gui.py" />
     <entry file="file://$PROJECT_DIR$/system.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1083">
@@ -430,30 +520,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#161#11278#0" expanded="false" />
-            <element signature="e#885#1931#0" expanded="false" />
-            <element signature="e#3280#5780#0" expanded="false" />
-            <element signature="e#5813#6203#0" expanded="false" />
-            <element signature="e#6237#6628#0" expanded="false" />
-            <element signature="e#6663#7206#0" expanded="false" />
-            <element signature="e#7240#7776#0" expanded="false" />
-            <element signature="e#7869#8250#0" expanded="false" />
-            <element signature="e#8292#8749#0" expanded="false" />
-            <element signature="e#8791#9370#0" expanded="false" />
-            <element signature="e#9413#9487#0" expanded="false" />
-            <element signature="e#9529#9897#0" expanded="false" />
-            <element signature="e#9949#10022#0" expanded="false" />
-            <element signature="e#10087#10646#0" expanded="false" />
-            <element signature="e#12431#13873#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/gui.py" />
     <entry file="file://C:/Anaconda3/Lib/site-packages/scipy/stats/_distn_infrastructure.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
@@ -515,9 +582,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2016.1/system/python_stubs/1013586911/PyQt4/QtGui/QWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="708" column="8" selection-start-line="708" selection-start-column="8" selection-end-line="708" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gui.py" />
     <entry file="file://$PROJECT_DIR$/data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-196">
+        <state relative-caret-position="-1387">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding>
             <element signature="e#74#567#0" expanded="false" />
@@ -527,26 +603,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gui.py">
+    <entry file="file://$PROJECT_DIR$/gui.pyw">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="311" column="36" selection-start-line="311" selection-start-column="36" selection-end-line="311" selection-end-column="36" />
+        <state relative-caret-position="272">
+          <caret line="300" column="40" selection-start-line="300" selection-start-column="40" selection-end-line="300" selection-end-column="40" />
           <folding>
-            <element signature="e#161#11278#0" expanded="false" />
-            <element signature="e#885#1931#0" expanded="false" />
-            <element signature="e#3280#5780#0" expanded="false" />
-            <element signature="e#5813#6203#0" expanded="false" />
-            <element signature="e#6237#6628#0" expanded="false" />
-            <element signature="e#6663#7206#0" expanded="false" />
-            <element signature="e#7240#7776#0" expanded="false" />
-            <element signature="e#7869#8250#0" expanded="false" />
-            <element signature="e#8292#8749#0" expanded="false" />
-            <element signature="e#8791#9370#0" expanded="false" />
-            <element signature="e#9413#9487#0" expanded="false" />
-            <element signature="e#9529#9897#0" expanded="false" />
-            <element signature="e#9949#10022#0" expanded="false" />
-            <element signature="e#10087#10646#0" expanded="false" />
-            <element signature="e#12431#13873#0" expanded="false" />
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
