@@ -3,6 +3,7 @@ from math import exp
 from tools import Tools
 from scipy.stats import norm as norm_module
 
+
 class System:
     def __init__(self, data):
         self.data = data
@@ -127,14 +128,16 @@ class REA(System, clock.Observer):
                 loop_bc = e * loop_bc + (1 - e) * tank_bc
                 self.data['boron_vol'] -= boron_rate / 3600
         elif self._residual_boron_on:
-            if self._residual_boron_rate > 0.01:
+            if self._residual_boron_rate > 0.1:
                 e = exp(-self._residual_boron_rate / 3600 / rcp_vol)
                 loop_bc = e * loop_bc + (1 - e) * tank_bc
                 self._residual_boron_rate *= 2 ** (-1 / self.data['boron_rate_half_time'])
+                print('boron rate = %f, boron half time = %d' % (self._residual_boron_rate,
+                                                                 self.data['boron_rate_half_time']))
             else:
                 self._residual_boron_on = False
         elif self._residual_dilute_on:
-            if self._residual_dilute_rate > 0.01:
+            if self._residual_dilute_rate > 0.1:
                 e = exp(-self._residual_dilute_rate / 3600 / rcp_vol)
                 loop_bc *= e
                 self._residual_dilute_rate *= 2 ** (-1 / self.data['dilute_rate_half_time'])
