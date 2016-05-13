@@ -5,7 +5,7 @@ import system
 import data
 import command
 import datetime
-
+import data_dialog
 
 class Gui(QtGui.QWidget, clock.Observer):
     def __init__(self, parent=None):
@@ -199,8 +199,11 @@ class Gui(QtGui.QWidget, clock.Observer):
     def add_system(self, s):
         self.systems.append(s)
 
+    def get_system_dict(self):
+        return {s.get_data()['name']: s for s in self.systems}
+
     def update(self):
-        system_dict = {s.get_data()['name']: s for s in self.systems}
+        system_dict = self.get_system_dict()
         self.display_rgl(system_dict['rgl'].get_data())
         self.display_rea(system_dict['rea'].get_data())
         self.display_reac(system_dict['reac'].get_data())
@@ -290,6 +293,28 @@ class Gui(QtGui.QWidget, clock.Observer):
     def set_boron_off_command(self, com):
         self.boron_off_command = com
 
+    def set_init_data(self, init_data):
+        """
+        将个系统的参数设置为init_data所包含的参数。
+        :param init_data:
+        init_data是一个字典，包含的所有控制棒的棒位，和一回路的硼浓度。
+        键列表为：
+        ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos', 'g1pos', 'g2pos', 'n1pos', 'n2pos', 'boron']
+        :return: None
+        """
+        # todo complete this method
+        self
+        pass
+
+    def get_init_data(self):
+        """
+        返回各系统的初始参数
+        :return: dict, see method set_init_data's parameter init_data.
+        """
+        # todo complete this method
+        self
+        pass
+
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self, gui):
@@ -309,10 +334,16 @@ class MainWindow(QtGui.QMainWindow):
         close_action = QtGui.QAction(QtGui.QIcon('icons/close.png'), '退出', self)
         self.connect(close_action, QtCore.SIGNAL('triggered()'), self, QtCore.SLOT('on_quit()'))
 
+        get_init_data_action = QtGui.QAction(QtGui.QIcon('icons/setting.png'), '初始数据', self)
+        self.connect(get_init_data_action, QtCore.SIGNAL('triggered()'), self, QtCore.SLOT('on_init_data()'))
+
         menu_bar = self.menuBar()
         file = menu_bar.addMenu('&File')
         file.addAction(save_action)
         file.addAction(close_action)
+
+        setting = menu_bar.addMenu('&Setting')
+        setting.addAction(get_init_data_action)
 
     @QtCore.pyqtSlot()
     def on_save(self):
@@ -324,6 +355,12 @@ class MainWindow(QtGui.QMainWindow):
     def on_quit(self):
         self.save_file_object.close()
         QtGui.qApp.quit()
+
+    @QtCore.pyqtSlot()
+    def on_init_data(self):
+        dialog = data_dialog.InitialDataDialog(self.gui.get_init_data())
+        init_data = dialog.get_data()
+        self.gui.set_init_data(init_data)
 
 
 if __name__ == '__main__':
