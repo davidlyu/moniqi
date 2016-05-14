@@ -7,6 +7,7 @@ import command
 import datetime
 import data_dialog
 
+
 class Gui(QtGui.QWidget, clock.Observer):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -302,18 +303,28 @@ class Gui(QtGui.QWidget, clock.Observer):
         ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos', 'g1pos', 'g2pos', 'n1pos', 'n2pos', 'boron']
         :return: None
         """
-        # todo complete this method
-        self
-        pass
+        system_dict = self.get_system_dict()
+        init_data_names = ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos',
+                           'g1pos', 'g2pos', 'n1pos', 'n2pos']
+        for name in init_data_names:
+            system_dict['rgl'].get_data()[name] = int(init_data[name])
+
+        system_dict['rea'].get_data()['loop_bc'] = float(init_data['loop_bc'])
 
     def get_init_data(self):
         """
         返回各系统的初始参数
         :return: dict, see method set_init_data's parameter init_data.
         """
-        # todo complete this method
-        self
-        pass
+        system_dict = self.get_system_dict()
+        init_data = {}
+        init_data_names = ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos',
+                           'g1pos', 'g2pos', 'n1pos', 'n2pos']
+        for name in init_data_names:
+            init_data[name] = system_dict['rgl'].get_data()[name]
+
+        init_data['loop_bc'] = system_dict['rea'].get_data()['loop_bc']
+        return init_data
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -359,8 +370,9 @@ class MainWindow(QtGui.QMainWindow):
     @QtCore.pyqtSlot()
     def on_init_data(self):
         dialog = data_dialog.InitialDataDialog(self.gui.get_init_data())
-        init_data = dialog.get_data()
-        self.gui.set_init_data(init_data)
+        init_data, ok = dialog.get_data()
+        if ok:
+            self.gui.set_init_data(init_data)
 
 
 if __name__ == '__main__':

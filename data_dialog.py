@@ -33,7 +33,10 @@ class DataDialog(QtGui.QDialog):
 
         result = self.exec_()
         data = self._data()
-        return data, result == QtGui.QDialog.Accepted
+        if data is None:
+            return data, False
+        else:
+            return data, result == QtGui.QDialog.Accepted
 
 
 class InitialDataDialog(DataDialog):
@@ -45,7 +48,7 @@ class InitialDataDialog(DataDialog):
         labels = ['R棒棒位', 'SA棒棒位', 'SB棒棒位', 'SC棒棒位', 'SD棒棒位',
                   'G1棒棒位', 'G2棒棒位', 'N1棒棒位', 'N2棒棒位', '硼浓度']
         names = ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos',
-                 'g1pos', 'g2pos', 'n1pos', 'n2pos', 'boron']
+                 'g1pos', 'g2pos', 'n1pos', 'n2pos', 'loop_bc']
         self.names = names
 
         self.grid = QtGui.QGridLayout()
@@ -68,6 +71,21 @@ class InitialDataDialog(DataDialog):
 
     def _data(self):
         # todo this method may raise ValueError exception
+        for key in self.names:
+            try:
+                value = float(self.widgets.get(key + 'TextEdit').text())
+                if key == 'loop_bc' and value < 0:
+                    raise ValueError('硼浓度不能小于0')
+                elif key != 'loop_bc' and (value < 5 or value > 225):
+                    raise ValueError('棒位不能小于5或大于225')
+            except ValueError as e:
+                msgbox = QtGui.QMessageBox()
+                msgbox.setIcon(QtGui.QMessageBox.Warning)
+                msgbox.setWindowTitle('错误')
+                msgbox.setText(e.args[0])
+                msgbox.setDefaultButton(QtGui.QMessageBox.Ok)
+                msgbox.exec_()
+                return None
         return {key: float(self.widgets.get(key + 'TextEdit').text())
                 for key in self.names}
 
