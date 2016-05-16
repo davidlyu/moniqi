@@ -70,7 +70,6 @@ class InitialDataDialog(DataDialog):
         self.setLayout(vbox)
 
     def _data(self):
-        # todo this method may raise ValueError exception
         for key in self.names:
             try:
                 value = float(self.widgets.get(key + 'TextEdit').text())

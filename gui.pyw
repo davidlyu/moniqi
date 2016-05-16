@@ -348,13 +348,27 @@ class MainWindow(QtGui.QMainWindow):
         get_init_data_action = QtGui.QAction(QtGui.QIcon('icons/setting.png'), '初始数据', self)
         self.connect(get_init_data_action, QtCore.SIGNAL('triggered()'), self, QtCore.SLOT('on_init_data()'))
 
+        start_action = QtGui.QAction(QtGui.QIcon('icons/start.png'), '开始', self)
+        self.connect(start_action, QtCore.SIGNAL('triggered()'), self, QtCore.SLOT('on_start()'))
+
+        pause_action = QtGui.QAction(QtGui.QIcon('icons/pause.png'), '暂停', self)
+        self.connect(pause_action, QtCore.SIGNAL('triggered()'), self, QtCore.SLOT('on_pause()'))
+
         menu_bar = self.menuBar()
         file = menu_bar.addMenu('&File')
+        file.addAction(start_action)
+        file.addAction(pause_action)
         file.addAction(save_action)
         file.addAction(close_action)
 
         setting = menu_bar.addMenu('&Setting')
         setting.addAction(get_init_data_action)
+
+        # assigned at add_clock method.
+        self.clock = None
+
+    def add_clock(self, clock):
+        self.clock = clock
 
     @QtCore.pyqtSlot()
     def on_save(self):
@@ -373,6 +387,14 @@ class MainWindow(QtGui.QMainWindow):
         init_data, ok = dialog.get_data()
         if ok:
             self.gui.set_init_data(init_data)
+
+    @QtCore.pyqtSlot()
+    def on_start(self):
+        self.clock.start(1000)
+
+    @QtCore.pyqtSlot()
+    def on_pause(self):
+        self.clock.pause()
 
 
 if __name__ == '__main__':
@@ -426,6 +448,7 @@ if __name__ == '__main__':
     ui.set_boron_off_command(boron_off_com)
 
     main_window = MainWindow(ui)
+    main_window.add_clock(clc)
     main_window.show()
 
     sys.exit(app.exec_())

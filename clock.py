@@ -25,7 +25,12 @@ class Clock(Subject, QtCore.QObject):
         self.timer = QtCore.QTimer(self)
         self.connect(self.timer, QtCore.SIGNAL('timeout()'),
                      self.update)
-        self.timer.start(1000)
+
+    def start(self, interval):
+        self.timer.start(interval)
+
+    def pause(self):
+        self.timer.stop()
 
     def update(self):
         self.notify_observers()
