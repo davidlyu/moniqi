@@ -1,0 +1,1 @@
+{"tank_bc": 7000, "name": "rea", "dilute_rate": 0, "boron_vol": 0, "is_boron_active": false, "loop_bc": 1178, "boron_rate_half_time": 120, "dilute_rate_half_time": 120, "dilute_vol": 0, "delta_rho": 0, "boron_value": [[2000, -9.75], [1500, -10.54], [1000, -11.47], [500, -12.55], [10, -13.78]], "rcp_vol": 199, "boron_rate": 0, "is_dilute_active": false}
