@@ -201,14 +201,14 @@ class Gui(QtGui.QWidget, clock.Observer):
         self.systems.append(s)
 
     def get_system_dict(self):
-        return {s.get_data()['name']: s for s in self.systems}
+        return {s.data['name']: s for s in self.systems}
 
     def update(self):
         system_dict = self.get_system_dict()
-        self.display_rgl(system_dict['rgl'].get_data())
-        self.display_rea(system_dict['rea'].get_data())
-        self.display_reac(system_dict['reac'].get_data())
-        self.display_kic(system_dict['kic'].get_data())
+        self.display_rgl(system_dict['rgl'].data)
+        self.display_rea(system_dict['rea'].data)
+        self.display_reac(system_dict['reac'].data)
+        self.display_kic(system_dict['kic'].data)
 
         if self.save_file_on:
             self.save_file(self.save_file_object, system_dict)
@@ -257,11 +257,11 @@ class Gui(QtGui.QWidget, clock.Observer):
 
     @staticmethod
     def save_file(file_object, dat):
-        src1 = dat['kic'].get_data()['src1']
-        src2 = dat['kic'].get_data()['src2']
-        irc1 = dat['kic'].get_data()['irc1']
-        irc2 = dat['kic'].get_data()['irc2']
-        reactivity = dat['reac'].get_data()['reactivity']
+        src1 = dat['kic'].data()['src1']
+        src2 = dat['kic'].data()['src2']
+        irc1 = dat['kic'].data()['irc1']
+        irc2 = dat['kic'].data()['irc2']
+        reactivity = dat['reac'].data()['reactivity']
         n = datetime.datetime.now()
         d = n.strftime('%Y-%m-%d,%H:%M:%S')
         form = '{datetime:s},{src1:.0f},{src2:.0f},{irc1:.3E},{irc2:.3E},{reactivity:.1f}'.format(
@@ -307,9 +307,9 @@ class Gui(QtGui.QWidget, clock.Observer):
         init_data_names = ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos',
                            'g1pos', 'g2pos', 'n1pos', 'n2pos']
         for name in init_data_names:
-            system_dict['rgl'].get_data()[name] = int(init_data[name])
+            system_dict['rgl'].data()[name] = int(init_data[name])
 
-        system_dict['rea'].get_data()['loop_bc'] = float(init_data['loop_bc'])
+        system_dict['rea'].data()['loop_bc'] = float(init_data['loop_bc'])
 
     def get_init_data(self):
         """
@@ -321,9 +321,9 @@ class Gui(QtGui.QWidget, clock.Observer):
         init_data_names = ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos',
                            'g1pos', 'g2pos', 'n1pos', 'n2pos']
         for name in init_data_names:
-            init_data[name] = system_dict['rgl'].get_data()[name]
+            init_data[name] = system_dict['rgl'].data()[name]
 
-        init_data['loop_bc'] = system_dict['rea'].get_data()['loop_bc']
+        init_data['loop_bc'] = system_dict['rea'].data()['loop_bc']
         return init_data
 
 
@@ -402,19 +402,14 @@ if __name__ == '__main__':
 
     clc = clock.Clock()
 
-    rgl_data = data.RglData()
-    rgl = system.RGL(rgl_data)
+    rgl = system.RGL()
+    rea = system.REA()
+    reac = system.Reac()
 
-    rea_data = data.ReaData()
-    rea = system.REA(rea_data)
-
-    reac_data = data.ReacData()
-    reac = system.Reac(reac_data)
     reac.add_system(rgl)
     reac.add_system(rea)
 
-    kic_data = data.KicData()
-    kic = system.KIC(kic_data)
+    kic = system.KIC()
     kic.add_systems(reac)
 
     ui = Gui()

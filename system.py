@@ -1,21 +1,31 @@
 import clock
 from math import exp
+import data
 from tools import Tools
 from scipy.stats import norm as norm_module
 
 
-class System:
-    def __init__(self, data):
-        self.data = data
+class System(object):
+    def __init__(self):
+        object.__init__(self)
+        self._data = None
 
-    def get_data(self):
-        return self.data
+    @property
+    def data(self):
+        if self._data is None:
+            raise AttributeError('Attribute Error: attribute should be assigned.')
+        return self._data
+
+    @data.setter
+    def data(self, value):
+        self._data = value
 
 
 class RGL(System, clock.Observer):
-    def __init__(self, data):
-        System.__init__(self, data)
-        self.random_item = 1 + norm_module.rvs(0, data['rod_value_accuracy'], 1)[0]
+    def __init__(self):
+        System.__init__(self)
+        self.data = data.RglData()
+        self.random_item = 1 + norm_module.rvs(0, self.data['rod_value_accuracy'], 1)[0]
 
     def move_temp_rod(self, rod, target):
         if not self.data['is_temp_active']:
@@ -73,8 +83,9 @@ class RGL(System, clock.Observer):
 
 
 class REA(System, clock.Observer):
-    def __init__(self, data):
-        System.__init__(self, data)
+    def __init__(self):
+        System.__init__(self)
+        self.data = data.ReaData()
         self._residual_boron_rate = 0
         self._residual_dilute_rate = 0
         self._residual_boron_on = False
@@ -132,8 +143,7 @@ class REA(System, clock.Observer):
                 e = exp(-self._residual_boron_rate / 3600 / rcp_vol)
                 loop_bc = e * loop_bc + (1 - e) * tank_bc
                 self._residual_boron_rate *= 2 ** (-1 / self.data['boron_rate_half_time'])
-                print('boron rate = %f, boron half time = %d' % (self._residual_boron_rate,
-                                                                 self.data['boron_rate_half_time']))
+
             else:
                 self._residual_boron_on = False
         elif self._residual_dilute_on:
@@ -150,10 +160,11 @@ class REA(System, clock.Observer):
 
 
 class Reac(System, clock.Observer):
-    def __init__(self, data):
-        System.__init__(self, data)
+    def __init__(self):
+        System.__init__(self)
+        self.data = data.ReacData()
         self.systems = []
-        self.previous_random = norm_module.rvs(0, data['reactivity_accuracy'], 1)[0]
+        self.previous_random = norm_module.rvs(0, self.data['reactivity_accuracy'], 1)[0]
 
     def add_system(self, s):
         self.systems.append(s)
@@ -185,16 +196,15 @@ class Reac(System, clock.Observer):
         t0 = 10
         t1 = t0 - (self.rho(t0) - rho) / self.rho_d(t0)
         while abs(t0 - t1) > 1.0E-3:
-            # print('t0=%.2f\tt1=%.2f' % (t0, t1))
             t0 = t1
             t1 = t0 - (self.rho(t0) - rho) / self.rho_d(t0)
 
         return t1 * sign
 
     def update(self):
-        system_dict = {s.get_data()['name']: s for s in self.systems}
-        self.data['reactivity'] += system_dict['rgl'].get_data()['delta_rho']
-        self.data['reactivity'] += system_dict['rea'].get_data()['delta_rho']
+        system_dict = {s.data['name']: s for s in self.systems}
+        self.data['reactivity'] += system_dict['rgl'].data['delta_rho']
+        self.data['reactivity'] += system_dict['rea'].data['delta_rho']
 
         # 将反应性加上相邻两个随机数的差，而不是直接加上一个随机数，这样做的目的是消除长时间随机数累加和的漂移。
         current = norm_module.rvs(0, self.data['reactivity_accuracy'], 1)[0]
@@ -203,15 +213,16 @@ class Reac(System, clock.Observer):
 
 
 class KIC(System, clock.Observer):
-    def __init__(self, data):
-        System.__init__(self, data)
+    def __init__(self):
+        System.__init__(self)
+        self.data = data.KicData()
         self.systems = []
 
     def add_systems(self, s):
         self.systems.append(s)
 
     def update(self):
-        system_dict = {s.get_data()['name']: s for s in self.systems}
+        system_dict = {s.data['name']: s for s in self.systems}
         self.data['core_power'] *= (2 ** (1 / system_dict['reac'].double_time()))
 
         power = self.data['core_power']
