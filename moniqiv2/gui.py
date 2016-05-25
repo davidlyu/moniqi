@@ -19,5 +19,12 @@ class MoniqiWindow(QtGui.QMainWindow):
 
         rgl_view = cus_wid.RGLViewWidget()
         rgl_view.set_positions((5, 25, 35, 45, 5, 5, 5, 5, 5))
+        rgl_operator = cus_wid.RGLOperateWidget()
 
-        self.setCentralWidget(rgl_view)
+        vbox = QtGui.QVBoxLayout()
+        vbox.addWidget(rgl_view)
+        vbox.addWidget(rgl_operator)
+
+        central_widget = QtGui.QWidget()
+        central_widget.setLayout(vbox)
+        self.setCentralWidget(central_widget)

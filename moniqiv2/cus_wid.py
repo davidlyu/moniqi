@@ -100,4 +100,78 @@ class RGLViewWidget(QtGui.QWidget):
 
 
 class RGLOperateWidget(QtGui.QWidget):
-    
+    def __init__(self, parent=None):
+        QtGui.QWidget.__init__(self, parent)
+
+        self.current_temp_changed = QtCore.pyqtSignal()
+        self.current_power_changed = QtCore.pyqtSignal()
+
+        self._temp_selector = QtGui.QComboBox()
+        self._power_selector = QtGui.QComboBox()
+        self._temp_need = QtGui.QLineEdit()
+        self._power_need = QtGui.QLineEdit()
+        self._temp_button = QtGui.QPushButton()
+        self._power_button = QtGui.QPushButton()
+
+        self._set_widget()
+
+    def _set_widget(self):
+        self._temp_selector.addItems(['R', 'SA', 'SB', 'SC', 'SD'])
+        self._power_selector.addItems(['G1', 'G2', 'N1', 'N2', 'G'])
+        self._temp_button.setText('Start')
+        self._power_button.setText('Start')
+
+        hbox = QtGui.QHBoxLayout()
+        hbox.addWidget(self._temp_selector)
+        hbox.addWidget(self._temp_need)
+        hbox.addWidget(self._temp_button)
+        hbox.addWidget(self._power_selector)
+        hbox.addWidget(self._power_need)
+        hbox.addWidget(self._power_button)
+        self.setLayout(hbox)
+
+        self.connect(self._temp_selector, QtCore.SIGNAL('currentIndexChanged()'), self._on_temp_changed)
+        self.connect(self._power_selector, QtCore.SIGNAL('currentIndexChanged()'), self._on_power_changed)
+
+    def _on_temp_changed(self):
+        self.current_temp_changed.emit()
+
+    def _on_power_changed(self):
+        self.current_power_changed.emit()
+
+    def get_current_temp(self):
+        temp_rod = str(self._temp_selector.currentText())
+        return temp_rod
+
+    def get_current_power(self):
+        power_rod = str(self._power_selector.currentText())
+        return power_rod
+
+    def get_temp_need(self):
+        try:
+            temp_pos = int(self._temp_need.text())
+            tools.check_integer(temp_pos, 0, 225)
+        except ValueError:
+            msgbox = QtGui.QMessageBox()
+            msgbox.setIcon(QtGui.QMessageBox.Warning)
+            msgbox.setWindowTitle('错误')
+            msgbox.setText('R/S目标棒位必须是0-225的整数')
+            msgbox.setDefaultButton(QtGui.QMessageBox.Ok)
+            msgbox.exec_()
+            return None
+        return temp_pos
+
+    def get_power_need(self):
+        try:
+            power_pos = int(self._power_need.text())
+            tools.check_integer(power_pos, 0, 225)
+        except ValueError:
+            msgbox = QtGui.QMessageBox()
+            msgbox.setIcon(QtGui.QMessageBox.Warning)
+            msgbox.setWindowTitle('错误')
+            msgbox.setText('功率补偿棒目标棒位必须是0-225的整数')
+            msgbox.setDefaultButton(QtGui.QMessageBox.Ok)
+            msgbox.exec_()
+            return None
+        return power_pos
+
