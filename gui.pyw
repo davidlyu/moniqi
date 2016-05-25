@@ -257,11 +257,13 @@ class Gui(QtGui.QWidget, clock.Observer):
 
     @staticmethod
     def save_file(file_object, dat):
-        src1 = dat['kic'].get_data()['src1']
-        src2 = dat['kic'].get_data()['src2']
-        irc1 = dat['kic'].get_data()['irc1']
-        irc2 = dat['kic'].get_data()['irc2']
-        reactivity = dat['reac'].get_data()['reactivity']
+
+        src1 = dat['kic'].data['src1']
+        src2 = dat['kic'].data['src2']
+        irc1 = dat['kic'].data['irc1']
+        irc2 = dat['kic'].data['irc2']
+        reactivity = dat['reac'].data['reactivity']
+
         n = datetime.datetime.now()
         d = n.strftime('%Y-%m-%d,%H:%M:%S')
         form = '{datetime:s},{src1:.0f},{src2:.0f},{irc1:.3E},{irc2:.3E},{reactivity:.1f}'.format(
@@ -307,9 +309,10 @@ class Gui(QtGui.QWidget, clock.Observer):
         init_data_names = ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos',
                            'g1pos', 'g2pos', 'n1pos', 'n2pos']
         for name in init_data_names:
-            system_dict['rgl'].get_data()[name] = int(init_data[name])
 
-        system_dict['rea'].get_data()['loop_bc'] = float(init_data['loop_bc'])
+            system_dict['rgl'].data[name] = int(init_data[name])
+
+        system_dict['rea'].data['loop_bc'] = float(init_data['loop_bc'])
 
     def get_init_data(self):
         """
@@ -321,9 +324,10 @@ class Gui(QtGui.QWidget, clock.Observer):
         init_data_names = ['rpos', 'sapos', 'sbpos', 'scpos', 'sdpos',
                            'g1pos', 'g2pos', 'n1pos', 'n2pos']
         for name in init_data_names:
-            init_data[name] = system_dict['rgl'].get_data()[name]
+            init_data[name] = system_dict['rgl'].data[name]
 
-        init_data['loop_bc'] = system_dict['rea'].get_data()['loop_bc']
+        init_data['loop_bc'] = system_dict['rea'].data['loop_bc']
+
         return init_data
 
 
@@ -373,12 +377,14 @@ class MainWindow(QtGui.QMainWindow):
     @QtCore.pyqtSlot()
     def on_save(self):
         filename = QtGui.QFileDialog.getSaveFileName(self, 'Save File', './')
-        self.save_file_object = open(filename, 'a')
-        self.gui.set_save(self.save_file_object)
+        if len(filename):
+            self.save_file_object = open(filename, 'a')
+            self.gui.set_save(self.save_file_object)
 
     @QtCore.pyqtSlot()
     def on_quit(self):
-        self.save_file_object.close()
+        if self.save_file_object is not None:
+            self.save_file_object.close()
         QtGui.qApp.quit()
 
     @QtCore.pyqtSlot()
